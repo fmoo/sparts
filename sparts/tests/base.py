@@ -10,6 +10,7 @@ except ImportError:
     import unittest
 import logging
 import os.path
+import re
 
 from sparts.vservice import VService
 
@@ -41,6 +42,9 @@ class BaseSpartsTestCase(unittest.TestCase):
 
     def assertNotExists(self, path, msg=''):
         self.assertFalse(os.path.exists(path), msg)
+
+    def assertMatch(self, r, s, msg=''):
+        self.assertNotNone(re.match(r, s), msg)
 
     @classmethod
     def setUpClass(cls):
