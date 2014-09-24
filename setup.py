@@ -5,7 +5,7 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 from distutils.command.upload import upload as UploadCommand
-from setuptools import setup, find_packages, Command
+from setuptools import setup, find_packages, Command, Extension
 from setuptools.command.build_py import build_py as _build_py
 from setuptools.command.test import test as TestCommand
 
@@ -167,6 +167,20 @@ else:
     tests_require.append('Twisted>=14.0.0')
     # TODO: for py3k use fbthrift instead of thrift?
 
+gflags_extension = Extension(
+    '_sparts_gflags',
+    sources=['modules/GflagsModule.cpp'],
+    extra_compile_args=[
+        '-std=c++11',
+    ],
+    libraries=[
+        #'gflags',
+        'folly',
+        #'boost_python-py27',
+        'boost_python',
+    ],
+)
+
 VERSION = version()
 setup(
     name=NAME,
@@ -188,6 +202,7 @@ setup(
     keywords='service boostrap daemon thrift tornado',
     url='http://github.com/facebook/sparts',
     download_url='https://github.com/facebook/sparts/archive/%s.tar.gz' % VERSION,
+    ext_modules=[gflags_extension],
 
     test_suite="tests",
     cmdclass=cmdclass,
